@@ -1,5 +1,5 @@
 from flask import Flask, render_template
-from db import insert_data_network
+from db import insert_data_network, show_network_history
 from speedtest import measure_download_speed, measure_upload_speed
 
 app = Flask(__name__)
@@ -18,6 +18,9 @@ def run_speedtest():
     
     return res
 
+@app.route("/show-all-history")
+def show_history():
+    return show_network_history()
 
 if __name__ == "__main__":
-    app.run(debug=True, port=8888)
+    app.run(host="0.0.0.0", debug=True, port=8888)

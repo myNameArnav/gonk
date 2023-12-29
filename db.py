@@ -34,3 +34,14 @@ def insert_data_network(download_speed:float, upload_speed:float, size=SIZE, ser
         )
 
         return {"status": "success"}
+
+def show_network_history():
+    with sqlite3.connect("gonk.db") as conn:
+        cursor = conn.cursor()
+        
+        cursor.execute(
+            "select * from network_data"
+        )
+        result = cursor.fetchall()
+
+        return result
