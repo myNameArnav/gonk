@@ -1,0 +1,6 @@
+__pycache__
+.vscode
+ignore
+config.py
+test*.py
+*.db
