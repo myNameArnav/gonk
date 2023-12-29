@@ -1,0 +1,20 @@
+import uuid
+import os
+
+BASE_URL = 
+PORT = 
+SIZE = 
+HEADERS = {}
+DL_PARAMS = {
+    "nocache": str(uuid.uuid4()),
+    "size": SIZE,
+    "guid": str(uuid.uuid4()),
+}
+
+UP_PARAMS = {
+    "nocache": str(uuid.uuid4()),
+    "guid": str(uuid.uuid4()),
+}
+BITS = False
+
+RANDOM_DATA = os.urandom(SIZE)
