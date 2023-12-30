@@ -74,5 +74,5 @@ def show_filtered_history_data(from_date, to_date) -> list:
 
         columns = [desc[0] for desc in cursor.description]
         result = {"data": [dict(zip(columns, row)) for row in rows]}
-        
+
         return result
