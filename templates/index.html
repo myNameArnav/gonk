@@ -1,12 +1,136 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>gonk</title>
-    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>🌐 Gonk</title>
+    <!-- Include Chart.js library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Include HTMX library -->
+    <script src="https://unpkg.com/htmx.org@1.7.2/dist/htmx.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poor+Story&family=Unica+One&display=swap" rel="stylesheet"> 
+    <style>
+        
+        body {
+            transition: background-color 0.5s;
+            font-family: "Arial", sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .heading{
+            font-family: "Unica One", sans-serif;
+            text-align: center;
+            font-size: 5rem;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .chart-container {
+            margin-top: 20px;
+        }
+
+        canvas {
+            margin: 1rem;
+            padding: 0.5rem;
+            border-radius: 4px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
 </head>
+
 <body>
-    <h1>GONK</h1>
+    <div class="heading">Gonk</div>
+
+    <div class="chart-container">
+        <canvas id="myChart" width="800" height="200%"></canvas>
+    </div>
+
+    <!-- Button to update the chart -->
+    <!-- <button hx-get="/fetchData" hx-trigger="click" hx-swap="outerHTML" hx-target=".chart-container">
+        Update Chart
+    </button> -->
+
+    <script>
+        // Function to fetch data from the API
+        function fetchData() {
+            return fetch("http://localhost:8888/show-all-history")
+                .then((response) => response.json())
+                .then((data) => {
+                    // Process the data and update the chart
+                    updateChart(data.data);
+                })
+                .catch((error) => {
+                    console.error("Error fetching data:", error);
+                });
+        }
+
+        // Function to update the chart with new data
+        function updateChart(data) {
+            const labels = data.map((entry) => formatDate(entry.timestamp));
+            const downloadData = data.map((entry) => entry.download);
+            const uploadData = data.map((entry) => entry.upload);
+
+            const ctx = document.getElementById("myChart").getContext("2d");
+            const myChart = new Chart(ctx, {
+                type: "bar",
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: "Download Speed",
+                            data: downloadData,
+                            backgroundColor: "rgba(75, 192, 192, 0.2)",
+                            borderColor: "rgba(75, 192, 192, 1)",
+                            borderWidth: 1,
+                        },
+                        {
+                            label: "Upload Speed",
+                            data: uploadData,
+                            backgroundColor: "rgba(255, 99, 132, 0.2)",
+                            borderColor: "rgba(255, 99, 132, 1)",
+                            borderWidth: 1,
+                        },
+                    ],
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                        },
+                    },
+                },
+            });
+        }
+
+        // Function to format Unix timestamp to a human-readable date
+        function formatDate(timestamp) {
+            const date = new Date(timestamp * 1000);
+            const options = {
+                day: "numeric",
+                month: "short",
+                hour: "numeric",
+                minute: "numeric",
+            };
+            return date.toLocaleDateString(undefined, options); // Displays date in the format like "30 Dec 20:43"
+        }
+
+        // Initial chart rendering (optional)
+        fetchData();
+    </script>
 </body>
+
 </html>
