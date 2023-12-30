@@ -1,6 +1,7 @@
-from flask import Flask, render_template
-from db import insert_data_network, show_network_history
+from flask import Flask, render_template, request
+from db import insert_data_network, show_network_history, show_filtered_history_data
 from speedtest import measure_download_speed, measure_upload_speed
+from time import time
 
 app = Flask(__name__)
 
@@ -21,6 +22,12 @@ def run_speedtest():
 @app.route("/show-all-history")
 def show_history():
     return show_network_history()
+
+@app.route("/show-filtered-history")
+def show_filtered_history(from_date = None, to_date = None):
+    from_date = request.args.get("from_date", time() - 86400)
+    to_date = request.args.get("to_date", time())
+    return show_filtered_history_data(from_date, to_date)
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", debug=True, port=8888)
