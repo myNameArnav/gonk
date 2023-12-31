@@ -37,4 +37,4 @@ def show_filtered_history(from_date=None, to_date=None):
 
 
 if __name__ == "__main__":
-    app.run(debug=True, port=8888)
+    app.run(debug=False, port=8888)
